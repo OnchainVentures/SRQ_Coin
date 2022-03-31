@@ -1,0 +1,16 @@
+
+[project]
+name = "SRQ_Coin"
+authors = []
+telemetry = true
+analysis = ["check_checker"]
+
+[contracts.auth]
+path = "contracts/auth.clar"
+depends_on = []
+[contracts.core-v1]
+path = "contracts/core-v1.clar"
+depends_on = []
+[contracts.token]
+path = "contracts/token.clar"
+depends_on = ["auth"]
