@@ -6,8 +6,8 @@
 
 ;; TRAIT DEFINITIONS
 
-(impl-trait 'SP466FNC0P7JWTNM2R9T199QRZN1MYEDTAR0KP27.citycoin-token-trait.citycoin-token)
-(use-trait coreTrait 'SP466FNC0P7JWTNM2R9T199QRZN1MYEDTAR0KP27.citycoin-core-trait.citycoin-core)
+(impl-trait .citycoin-token-trait.citycoin-token)
+(use-trait coreTrait .citycoin-core-trait.citycoin-core)
 
 ;; ERROR CODES
 
@@ -17,7 +17,7 @@
 
 ;; SIP-010 DEFINITION
 
-(impl-trait 'SP3FBR2AGK5H9QBDH3EEN6DF8EK8JY7RX8QJ5SVTE.sip-010-trait-ft-standard.sip-010-trait)
+(impl-trait .sip-010-trait-ft-standard.sip-010-trait)
 
 (define-fungible-token sarasotacoin)
 
@@ -129,7 +129,7 @@
 (define-public (mint (amount uint) (recipient principal))
   (let
     (
-      (coreContract (try! (contract-call? 'SP466FNC0P7JWTNM2R9T199QRZN1MYEDTAR0KP27.sarasotacoin-auth get-core-contract-info contract-caller)))
+      (coreContract (try! (contract-call? .sarasotacoin-auth get-core-contract-info contract-caller)))
     )
     (ft-mint? sarasotacoin amount recipient)
   )
@@ -139,7 +139,7 @@
 (define-public (burn (amount uint) (recipient principal))
   (let
     (
-      (coreContract (try! (contract-call? 'SP466FNC0P7JWTNM2R9T199QRZN1MYEDTAR0KP27.sarasotacoin-auth get-core-contract-info contract-caller)))
+      (coreContract (try! (contract-call? .sarasotacoin-auth get-core-contract-info contract-caller)))
     )
     (ft-burn? sarasotacoin amount recipient)
   )
@@ -147,7 +147,7 @@
 
 ;; checks if caller is Auth contract
 (define-private (is-authorized-auth)
-  (is-eq contract-caller 'SP466FNC0P7JWTNM2R9T199QRZN1MYEDTAR0KP27.sarasotacoin-auth)
+  (is-eq contract-caller .sarasotacoin-auth)
 )
 
 ;; SEND-MANY

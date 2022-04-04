@@ -3,14 +3,34 @@
 name = "SRQ_Coin"
 authors = []
 telemetry = true
-analysis = ["check_checker"]
+# analysis = ["check_checker"]
 
-[contracts.auth]
+[contracts.sarasotacoin-auth]
 path = "contracts/auth.clar"
-depends_on = []
+depends_on = ["citycoin-core-trait", "citycoin-token-trait"]
+
 [contracts.core-v1]
 path = "contracts/core-v1.clar"
-depends_on = []
-[contracts.token]
+depends_on = ["sarasotacoin-token", "sarasotacoin-auth", "citycoin-vrf"]
+
+[contracts.sarasotacoin-token]
 path = "contracts/token.clar"
-depends_on = ["auth"]
+depends_on = ["sarasotacoin-auth", "citycoin-token-trait"]
+
+[contracts.citycoin-token-trait]
+path = "contracts/citycoin-token-trait.clar"
+depends_on = ["sip-010-trait-ft-standard"]
+
+[contracts.citycoin-core-trait]
+path = "contracts/citycoin-core-trait.clar"
+depends_on = []
+
+
+[contracts.citycoin-vrf]
+path = "contracts/citycoin-vrf.clar"
+depends_on = []
+
+
+[contracts.sip-010-trait-ft-standard]
+path = "contracts/sip-010-trait-ft-standard.clar"
+depends_on = []

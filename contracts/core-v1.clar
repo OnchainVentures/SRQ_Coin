@@ -2,7 +2,7 @@
 
 ;; GENERAL CONFIGURATION
 
-(impl-trait 'SP466FNC0P7JWTNM2R9T199QRZN1MYEDTAR0KP27.citycoin-core-trait.citycoin-core)
+(impl-trait .citycoin-core-trait.citycoin-core)
 (define-constant CONTRACT_OWNER tx-sender)
 
 ;; ERROR CODES
@@ -32,7 +32,7 @@
 ;; CITY WALLET MANAGEMENT
 
 ;; initial value for city wallet, set to this contract until initialized
-(define-data-var cityWallet principal 'SP466FNC0P7JWTNM2R9T199QRZN1MYEDTAR0KP27.sarasotacoin-core-v1)
+(define-data-var cityWallet principal .sarasotacoin-core-v1)
 
 ;; returns set city wallet principal
 (define-read-only (get-city-wallet)
@@ -131,7 +131,7 @@
     (
       (newId (+ u1 (var-get usersNonce)))
       (threshold (var-get activationThreshold))
-      (initialized (contract-call? 'SP466FNC0P7JWTNM2R9T199QRZN1MYEDTAR0KP27.sarasotacoin-auth is-initialized))
+      (initialized (contract-call? .sarasotacoin-auth is-initialized))
     )
 
     (asserts! initialized (err ERR_UNAUTHORIZED))
@@ -154,8 +154,8 @@
         (
           (activationBlockVal (+ block-height (var-get activationDelay)))
         )
-        (try! (contract-call? 'SP466FNC0P7JWTNM2R9T199QRZN1MYEDTAR0KP27.sarasotacoin-auth activate-core-contract (as-contract tx-sender) activationBlockVal))
-        (try! (contract-call? 'SP466FNC0P7JWTNM2R9T199QRZN1MYEDTAR0KP27.sarasotacoin-token activate-token (as-contract tx-sender) activationBlockVal))
+        (try! (contract-call? .sarasotacoin-auth activate-core-contract (as-contract tx-sender) activationBlockVal))
+        (try! (contract-call? .sarasotacoin-token activate-token (as-contract tx-sender) activationBlockVal))
         (try! (set-coinbase-thresholds))
         (var-set activationReached true)
         (var-set activationBlock activationBlockVal)
@@ -449,7 +449,7 @@
       (blockStats (unwrap! (get-mining-stats-at-block minerBlockHeight) (err ERR_NO_MINERS_AT_BLOCK)))
       (minerStats (unwrap! (get-miner-at-block minerBlockHeight userId) (err ERR_USER_DID_NOT_MINE_IN_BLOCK)))
       (isMature (asserts! (> stacksHeight maturityHeight) (err ERR_CLAIMED_BEFORE_MATURITY)))
-      (vrfSample (unwrap! (contract-call? 'SP466FNC0P7JWTNM2R9T199QRZN1MYEDTAR0KP27.citycoin-vrf get-random-uint-at-block maturityHeight) (err ERR_NO_VRF_SEED_FOUND)))
+      (vrfSample (unwrap! (contract-call? .citycoin-vrf get-random-uint-at-block maturityHeight) (err ERR_NO_VRF_SEED_FOUND)))
       (commitTotal (get-last-high-value-at-block minerBlockHeight))
       (winningValue (mod vrfSample commitTotal))
     )
@@ -514,7 +514,7 @@
       (blockStats (unwrap! (get-mining-stats-at-block minerBlockHeight) false))
       (minerStats (unwrap! (get-miner-at-block minerBlockHeight userId) false))
       (maturityHeight (+ (var-get tokenRewardMaturity) minerBlockHeight))
-      (vrfSample (unwrap! (contract-call? 'SP466FNC0P7JWTNM2R9T199QRZN1MYEDTAR0KP27.citycoin-vrf get-random-uint-at-block maturityHeight) false))
+      (vrfSample (unwrap! (contract-call? .citycoin-vrf get-random-uint-at-block maturityHeight) false))
       (commitTotal (get-last-high-value-at-block minerBlockHeight))
       (winningValue (mod vrfSample commitTotal))
     )
@@ -669,7 +669,7 @@
     (asserts! (and (> lockPeriod u0) (<= lockPeriod MAX_REWARD_CYCLES))
       (err ERR_CANNOT_STACK))
     (asserts! (> amountTokens u0) (err ERR_CANNOT_STACK))
-    (try! (contract-call? 'SP466FNC0P7JWTNM2R9T199QRZN1MYEDTAR0KP27.sarasotacoin-token transfer amountTokens tx-sender (as-contract tx-sender) none))
+    (try! (contract-call? .sarasotacoin-token transfer amountTokens tx-sender (as-contract tx-sender) none))
     (match (fold stack-tokens-closure REWARD_CYCLE_INDEXES (ok commitment))
       okValue (ok true)
       errValue (err errValue)
@@ -782,7 +782,7 @@
     )
     ;; send back tokens if user was eligible
     (if (> toReturn u0)
-      (try! (as-contract (contract-call? 'SP466FNC0P7JWTNM2R9T199QRZN1MYEDTAR0KP27.sarasotacoin-token transfer toReturn tx-sender user none)))
+      (try! (as-contract (contract-call? .sarasotacoin-token transfer toReturn tx-sender user none)))
       true
     )
     ;; send back rewards if user was eligible
@@ -806,7 +806,7 @@
 (define-private (set-coinbase-thresholds)
   (let
     (
-      (coinbaseAmounts (try! (contract-call? 'SP466FNC0P7JWTNM2R9T199QRZN1MYEDTAR0KP27.sarasotacoin-token get-coinbase-thresholds)))
+      (coinbaseAmounts (try! (contract-call? .sarasotacoin-token get-coinbase-thresholds)))
     )
     (var-set coinbaseThreshold1 (get coinbaseThreshold1 coinbaseAmounts))
     (var-set coinbaseThreshold2 (get coinbaseThreshold2 coinbaseAmounts))
@@ -862,7 +862,7 @@
 
 ;; mint new tokens for claimant who won at given Stacks block height
 (define-private (mint-coinbase (recipient principal) (stacksHeight uint))
-  (as-contract (contract-call? 'SP466FNC0P7JWTNM2R9T199QRZN1MYEDTAR0KP27.sarasotacoin-token mint (get-coinbase-amount stacksHeight) recipient))
+  (as-contract (contract-call? .sarasotacoin-token mint (get-coinbase-amount stacksHeight) recipient))
 )
 
 ;; UTILITIES
@@ -897,5 +897,5 @@
 
 ;; checks if caller is Auth contract
 (define-private (is-authorized-auth)
-  (is-eq contract-caller 'SP466FNC0P7JWTNM2R9T199QRZN1MYEDTAR0KP27.sarasotacoin-auth)
+  (is-eq contract-caller .sarasotacoin-auth)
 )

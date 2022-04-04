@@ -4,8 +4,8 @@
 
 ;; TRAIT DEFINITIONS
 
-(use-trait coreTrait 'SP466FNC0P7JWTNM2R9T199QRZN1MYEDTAR0KP27.citycoin-core-trait.citycoin-core)
-(use-trait tokenTrait 'SP466FNC0P7JWTNM2R9T199QRZN1MYEDTAR0KP27.citycoin-token-trait.citycoin-token)
+(use-trait coreTrait .citycoin-core-trait.citycoin-core)
+(use-trait tokenTrait .citycoin-token-trait.citycoin-token)
 
 ;; ERRORS
 
